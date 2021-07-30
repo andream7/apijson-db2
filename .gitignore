@@ -1,0 +1,3 @@
+# Project exclude paths
+/apijson-demo-db2/target/
+/APIJSONORM/target/

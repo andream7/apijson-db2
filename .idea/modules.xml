@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/apijson-db2.iml" filepath="$PROJECT_DIR$/apijson-db2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apijson-demo-db2/apijson-demo-db2.iml" filepath="$PROJECT_DIR$/apijson-demo-db2/apijson-demo-db2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apijson-framework/apijson-framework.iml" filepath="$PROJECT_DIR$/apijson-framework/apijson-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APIJSONORM/apijson-orm.iml" filepath="$PROJECT_DIR$/APIJSONORM/apijson-orm.iml" />
+    </modules>
+  </component>
+</project>
