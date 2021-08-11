@@ -62,7 +62,8 @@
    DB20000I  The SQL command completed successfully.
    ```
 
-现在再来看一下表空间的情况
+   现在再来看一下表空间的情况：
+   
 
    ```
    db2 => select TBSPACE, OWNER, PAGESIZE from syscat.tablespaces
