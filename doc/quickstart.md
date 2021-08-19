@@ -78,6 +78,6 @@
    BIGTABLESPACE                 DB2INST1                             32768
    ```
 
-8. 创建数据库中的表，sql语句在script文件夹下
+8. 创建数据库中的表，sql语句在script文件夹下，db2-dml.sql 包含的表结构和数据，db2.sql 只含有表结构。
 
    
