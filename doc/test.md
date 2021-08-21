@@ -72,6 +72,7 @@
 ```
 SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("contactIdList" is  NOT  null  AND (json_contains("contactIdList", '38710')))  )  ORDER BY "id" LIMIT 3
 ```
+json_contains这个函数暂时没找到替代的，可能是db2不支持。
 
 ## 判断是否存在
 
@@ -192,6 +193,11 @@ SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("contactIdList" is  NOT  null
 ```
 SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("name" REGEXP BINARY '^[0-9]%2B$')  )  ORDER BY "id" LIMIT 3
 ```
+正确的sql语句：
+```
+SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  'name' LIKE '^[0-9]%2B$'  ORDER BY "id" LIMIT 3;
+```
+REGEXP BINARY修改为LIKE
 
 ## 连续范围
 
@@ -328,8 +334,7 @@ SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("name" REGEXP BINARY '^[0-9]%
         "count": 5,
         "join": "&/User/id@,</Comment/momentId@",
         "Moment": {
-            "@column": "id,userId,content",
-            "@group": "id"
+            "@column": "id,userId,content"
         },
         "User": {
             "name~": "t",
@@ -337,11 +342,12 @@ SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("name" REGEXP BINARY '^[0-9]%
             "@column": "id,name,head"
         },
         "Comment": {
-            "momentId@": "/Moment/Fid",
+            "momentId@": "/Moment/id",
             "@column": "id,momentId,content"
         }
     }
 }
+                                                                                                                                                                                   
 ```
 
 结果：未通过
@@ -351,8 +357,16 @@ SELECT * FROM "DB2ADMIN"."apijson_user" WHERE  (  ("name" REGEXP BINARY '^[0-9]%
 ```
 SELECT "Moment"."id","Moment"."userId","Moment"."content", "User"."id","User"."name","User"."head", "Comment"."id","Comment"."momentId","Comment"."content" FROM "DB2ADMIN"."Moment" AS "Moment"  
    INNER JOIN "DB2ADMIN"."apijson_user" AS "User" ON "User"."id" = "Moment"."userId"  
-   LEFT JOIN ( SELECT "id","momentId","content" FROM "DB2ADMIN"."Comment" ) AS "Comment" ON "Comment"."momentId" = "Moment"."Fid" WHERE  (  (  (  ("User"."name" REGEXP BINARY 't')  )  )  )  GROUP BY "Moment"."id" ORDER BY "Moment"."id" LIMIT 5
+   LEFT JOIN ( SELECT "id","momentId","content" FROM "DB2ADMIN"."Comment" ) AS "Comment" ON "Comment"."momentId" = "Moment"."id" WHERE  (  (  (  ("User"."name" REGEXP BINARY 't')  )  )  )  ORDER BY "Moment"."id" LIMIT 5
+
 ```
+正确sql：
+```
+SELECT "Moment"."id","Moment"."userId","Moment"."content", "User"."id","User"."name","User"."head", "Comment"."id","Comment"."momentId","Comment"."content" FROM "DB2ADMIN"."Moment" AS "Moment"
+   INNER JOIN "DB2ADMIN"."apijson_user" AS "User" ON "User"."id" = "Moment"."userId"
+   LEFT JOIN ( SELECT "id","momentId","content" FROM "DB2ADMIN"."Comment" ) AS "Comment" ON "Comment"."momentId" = "Moment"."id" WHERE  (  (  (  ("User"."name" LIKE 't')  )  )  )  ORDER BY "Moment"."id" LIMIT 5
+```
+本质错误：REGEXP BINARY 修改为 LIKE
 
 ### 每一层都加当前用户名
 
